@@ -163,11 +163,11 @@ def prep_train(content_image, style_image, extractor):
     content_targets = extractor(content_image)['content']
 
     image = tf.Variable(content_image)
-    opt = tf.optimizers.Adam(learning_rate=0.004, beta_1=0.99, epsilon=1e-1)
+    opt = tf.optimizers.Adam(learning_rate=0.0002, beta_1=0.99, epsilon=1e-1)
 
-    style_weight = 1e-2
+    style_weight = 1e-1
     content_weight = 1e-1
-    total_variation_weight = 10
+    total_variation_weight = 0.1
     return image, opt, style_weight, content_weight, total_variation_weight, content_targets, style_targets
 
 def high_pass_x_y(image):
@@ -219,8 +219,8 @@ stylefiles = [f for f in os.listdir("./style/")]
 s = 2
 c = 0
 
-content_img_name = "content3.png"
-style_img_name = "blueglow.jpeg"
+content_img_name = "muster.png"
+style_img_name = "WCTstyleCustom.jpg"
 
 content_name  = content_img_name.split('.')[0]
 style_name = style_img_name.split('.')[0]
@@ -244,7 +244,6 @@ style_image = load_img(style_path)
 
 extractor = StyleContentModel(style_layers, content_layers)
 
-
 image, opt, style_weight, content_weight, total_variation_weight, content_targets, style_targets = \
     prep_train(content_image, style_image, extractor)
 
@@ -252,7 +251,7 @@ image, opt, style_weight, content_weight, total_variation_weight, content_target
 
 start = time.time()
 
-epochs = 100
+epochs = 150
 steps_per_epoch = 100
 
 step = 0
